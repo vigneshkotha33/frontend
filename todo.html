@@ -1,0 +1,117 @@
+<html>
+
+<head>
+    <script>
+        function deleteCurrentToDo(event) {
+            console.log(event);
+            event.target.parentElement.remove();
+        }
+
+        function editCurrentToDo(event) {
+            console.log(event);
+            var todoItemText = event.target.parentElement.cells[0].textContent;
+            var todoPriority = event.target.parentElement.cells[1].textContent;
+            var todoDate = event.target.parentElement.cells[2].textContent;
+
+            document.getElementById("todoText").value = todoItemText;
+            document.getElementById("todoPriority").value = todoPriority;
+            document.getElementById("todoDate").value = todoDate;
+
+            document.getElementById("updateButton").style.display = "block";
+            document.getElementById("addButton").style.display = "none";
+            document.getElementById("todoRowId").value = event.target.parentElement.rowIndex;
+        }
+
+        function updateToDoItemToList() {
+            var todoRowId = document.getElementById("todoRowId").value;
+            var todoTab = document.getElementById("todoTab");
+            var todoRows = todoTab.rows;
+
+            var todoItemText = document.getElementById("todoText").value;
+            var todoPriority = document.getElementById("todoPriority").value;
+            var todoDate = document.getElementById("todoDate").value;
+
+            todoRows[todoRowId].cells[0].textContent = todoItemText;
+            todoRows[todoRowId].cells[1].textContent = todoPriority;
+            todoRows[todoRowId].cells[2].textContent = todoDate;
+
+            document.getElementById("updateButton").style.display = "none";
+            document.getElementById("addButton").style.display = "block";
+            document.getElementById("todoText").value = "";
+            document.getElementById("todoPriority").value = "";
+            document.getElementById("todoDate").value = "";
+        }
+
+        function addToDoItemToList() {
+            var todoItemText = document.getElementById("todoText").value;
+            var todoPriority = document.getElementById("todoPriority").value;
+            var todoDate = document.getElementById("todoDate").value;
+            console.log(todoItemText);
+            console.log(todoPriority);
+            console.log(todoDate);
+
+            if (todoItemText.trim() === '' || todoPriority === '' || todoDate === '') {
+                alert("some data is missing please re try");
+            } else {
+                var todoTab = document.getElementById("todoTab");
+                todoTab.border = 1;
+                var todoRow = document.createElement("tr");
+                var todoDeleteBtn = document.createElement("button");
+                todoDeleteBtn.innerHTML = 'DELETE';
+                todoDeleteBtn.addEventListener("click", deleteCurrentToDo);
+
+                var todoEditBtn = document.createElement("button");
+                todoEditBtn.innerHTML = 'EDIT';
+                todoEditBtn.addEventListener("click", editCurrentToDo);
+
+                var todoTxtTd = document.createElement("td");
+                todoTxtTd.innerText = todoItemText;
+                var todoPriTd = document.createElement("td");
+                todoPriTd.innerText = todoPriority;
+                var todoDateTd = document.createElement("td");
+                todoDateTd.innerText = todoDate;
+
+                todoRow.appendChild(todoTxtTd);
+                todoRow.appendChild(todoPriTd);
+                todoRow.appendChild(todoDateTd);
+                todoRow.appendChild(todoEditBtn);
+                todoRow.appendChild(todoDeleteBtn);
+
+                todoTab.appendChild(todoRow);
+                document.getElementById("todoText").value = "";
+                document.getElementById("todoPriority").value = "";
+                document.getElementById("todoDate").value = "";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="hidden" id="todoRowId">
+    <table>
+        <tr>
+            <td>TO DO ITEM:</td>
+            <td><input id="todoText" type="text" /></td>
+        </tr>
+        <tr>
+            <td>Priority:</td>
+            <td><select id="todoPriority">
+                    <option>HIGH</option>
+                    <option>MEDIUM</option>
+                    <option>LOW</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td><input id="todoDate" type="date" /></td>
+        </tr>
+    </table>
+    <button id="addButton" onclick="addToDoItemToList();"> ADD TO-DO ITEM</button>
+    <button id="updateButton" style="display:none;" onclick="updateToDoItemToList();"> UPDATE TO-DO ITEM</button>
+    <div id="todoListDiv">
+        <table id="todoTab">
+        </table>
+    </div>
+</body>
+
+</html>
