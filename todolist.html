@@ -1,54 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+        function deleteCurrentToDo(event) {
+            console.log(event);
+            event.target.parentElement.remove();
+        }
 
-    <title>Employee Database Management System</title>
+        function editCurrentToDo(event) {
+            console.log(event);
+            var todoItemText = event.target.parentElement.cells[0].textContent;
+            var todoPriority = event.target.parentElement.cells[1].textContent;
+            var todoDate = event.target.parentElement.cells[2].textContent;
+
+            document.getElementById("todoText").value = todoItemText;
+            document.getElementById("todoPriority").value = todoPriority;
+            document.getElementById("todoDate").value = todoDate;
+
+            event.target.parentElement.remove();
+        }
+
+        function addToDoItemToList() {
+            var todoItemText = document.getElementById("todoText").value;
+            var todoPriority = document.getElementById("todoPriority").value;
+            var todoDate = document.getElementById("todoDate").value;
+            console.log(todoItemText);
+            console.log(todoPriority);
+            console.log(todoDate);
+
+            if (todoItemText.trim() === '' || todoPriority === '' || todoDate === '') {
+                alert("some data is missing please re try");
+            } else {
+                var todoTab = document.getElementById("todoTab");
+                todoTab.border = 1;
+                var todoRow = document.createElement("tr");
+                var todoDeleteBtn = document.createElement("button");
+                todoDeleteBtn.innerHTML = 'DELETE';
+                todoDeleteBtn.addEventListener("click", deleteCurrentToDo);
+
+                var todoEditBtn = document.createElement("button");
+                todoEditBtn.innerHTML = 'EDIT';
+                todoEditBtn.addEventListener("click", editCurrentToDo);
+
+                var todoTxtTd = document.createElement("td");
+                todoTxtTd.innerText = todoItemText;
+                var todoPriTd = document.createElement("td");
+                todoPriTd.innerText = todoPriority;
+                var todoDateTd = document.createElement("td");
+                todoDateTd.innerText = todoDate;
+
+                todoRow.appendChild(todoTxtTd);
+                todoRow.appendChild(todoPriTd);
+                todoRow.appendChild(todoDateTd);
+                todoRow.appendChild(todoEditBtn);
+                todoRow.appendChild(todoDeleteBtn);
+
+                todoTab.appendChild(todoRow);
+                document.getElementById("todoText").value = "";
+                document.getElementById("todoPriority").value = "";
+                document.getElementById("todoDate").value = "";
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <div id="app">
-        <header class="header">
-            <h1>Employee Database Management</h1>
-           
-        </header>
-
-        <div class="employees">
-            <div class="employees__names">
-                <span class="employees__names--title">
-                    Employee List
-                </span>
-                <div class="employees__names--list"></div>
-            </div>
-        </div>
-        <div class="addEmployee">
-            <form class="addEmployee_create">
-                Add a new Employee
-                <div>
-                    <input type="text" name="firstName" placeholder="First Name" required />
-                    <input type="text" name="lastName" placeholder="Last Name" required />
-                </div>
-                <div>
-                    <input type="email" name="email" placeholder="Email" required />
-                </div>
-                <div>
-                    <input type="number" name="salary" placeholder="Salary" required />
-                </div>
-                <div>
-                    <input type="date" name="dob" placeholder="Date of Birth" class="addEmployee_create--dob"
-                        required />
-
-                </div>
-                <input type="submit" class="addEmployee_create--submit" value="Submit" />
-
-
-            </form>
-        </div>
+    <table>
+        <tr>
+            <td>TO DO ITEM:</td>
+            <td><input id="todoText" type="text" /></td>
+        </tr>
+        <tr>
+            <td>Priority:</td>
+            <td><select id="todoPriority">
+                    <option>HIGH</option>
+                    <option>MEDIUM</option>
+                    <option>LOW</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td><input id="todoDate" type="date" /></td>
+        </tr>
+    </table>
+    <button onclick="addToDoItemToList();"> ADD TO-DO ITEM</button>
+    <div id="todoListDiv">
+        <table id="todoTab">
+        </table>
     </div>
-
-    <script src="script.js"></script>
 </body>
 
 </html>
